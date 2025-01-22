@@ -8,7 +8,7 @@ CREATE STORAGE INTEGRATION azure_integration
   STORAGE_PROVIDER = AZURE
   ENABLED = TRUE
   AZURE_TENANT_ID = '985adafb-97bd-46f6-92d8-8846e167a468'
-  STORAGE_ALLOWED_LOCATIONS = ('azure://snowflakepractice1702.blob.core.windows.net/snowflake/world-happiness-report-2021.csv', 'azure://tokyoolympicdata.blob.core.windows.net/tokyoolympiccontainer/transformeddata/');
+  STORAGE_ALLOWED_LOCATIONS = ( 'azure://tokyoolympicdata.blob.core.windows.net/tokyoolympiccontainer/transformeddata/');
 
   -- https://snowflakepractice1702.blob.core.windows.net/snowflake/CarModels.json
 -- https://snowflakepractice1702.blob.core.windows.net/snowflake/world-happiness-report-2021.csv
@@ -42,7 +42,7 @@ CREATE OR REPLACE TABLE athletes_transformed (
 );
 
 COPY INTO athletes_transformed
-FROM @olympics_db.azure_stage.stage_azure;
+FROM @olympics_db.azure_stage.stage_azure/athletes_transformed;
 
 
 CREATE OR REPLACE TABLE coaches_transformed (
@@ -54,7 +54,7 @@ CREATE OR REPLACE TABLE coaches_transformed (
 );
 
 COPY INTO coaches_transformed
-FROM @lympics_db.azure_stage.stage_azure/coaches_transformed;
+FROM @olympics_db.azure_stage.stage_azure/coaches_transformed;
 
 CREATE OR REPLACE TABLE entries_transformed (
     Discipline STRING,
@@ -66,8 +66,36 @@ CREATE OR REPLACE TABLE entries_transformed (
 );
 
 COPY INTO entries_transformed
-FROM @olympics_stage/entries_transformed
-FILE_FORMAT = (TYPE = 'PARQUET');
+FROM @olympics_db.azure_stage.stage_azure/entries_transformed;
+
+
+CREATE OR REPLACE TABLE medals_transformed (
+    Rank INT,
+    TeamCountry STRING,
+    Gold INT,
+    Silver INT,
+    Bronze INT,
+    Total INT,
+    RankByTotal INT,
+    GoldPercentage FLOAT,
+    SilverPercentage FLOAT,
+    BronzePercentage FLOAT
+);
+
+COPY INTO medals_transformed
+FROM @olympics_db.azure_stage.stage_azure/medals_transformed
+
+CREATE OR REPLACE TABLE teams_transformed (
+    TeamID BIGINT,
+    TeamName STRING,
+    Country STRING,
+    Discipline STRING,
+    TotalParticipants INT
+);
+
+COPY INTO teams_transformed
+FROM @olympics_db.azure_stage.stage_azure/teams_transformed
+
 
 
 

@@ -5,8 +5,12 @@ This project demonstrates the development of an end-to-end data pipeline to proc
 
 ## Architecture
 
+[alt text](olympics_pipeline_architecture.png)
+
 1. **Data Ingestion**:
    - Used **ADF Copy Activities** to ingest multiple datasets (e.g., athletes, coaches, entries gender, medals, teams) into the **raw folder** in Azure Storage.
+
+[alt text](ADF_Copy_Activity.jpeg)
 
 2. **Data Transformation**:
    - Used **Azure Databricks** to extract data from the raw folder in Azure Storage.
@@ -135,8 +139,4 @@ This project demonstrates the development of an end-to-end data pipeline to proc
   ORDER BY Gold DESC;
   ```
 
-## Future Enhancements
-- Integrate streaming data sources for real-time updates.
-- Add machine learning models to predict medal counts or athlete performance.
-- Enable dynamic schema updates for new datasets.
 
